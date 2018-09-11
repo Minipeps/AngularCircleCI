@@ -21,4 +21,4 @@ jobs:
         - "node_modules"
 
     - run: xvfb-run -a npm run test -- --watch=false --progress=false --browsers=ChromeNoSandbox
-    - run: xvfb-run -a npm run e2e -- --config=protractor-ci.conf.js
+    #- run: xvfb-run -a npm run e2e -- --config=protractor-ci.conf.js
