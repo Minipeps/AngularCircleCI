@@ -11,14 +11,27 @@ jobs:
     - checkout
 
     - restore_cache:
-        key: gt-frontend-{{ .Branch }}-{{ checksum "package.json" }}
+        key: AngularCircleCI-{{ .Branch }}-{{ checksum "package.json" }}
 
     - run: npm install
 
     - save_cache:
-        key: gt-frontend-{{ .Branch }}-{{ checksum "package.json" }}
+        key: AngularCircleCI-{{ .Branch }}-{{ checksum "package.json" }}
         paths:
         - "node_modules"
 
-    - run: xvfb-run -a npm run test -- --watch=false --progress=false --browsers=ChromeNoSandbox
+    - run: mkdir ~/junit
+    - run:
+        command: karma start ./karma.conf.js
+        environment:
+          JUNIT_REPORT_PATH: ./junit/
+          JUNIT_REPORT_NAME: test-results.xml
+        when: always
+    - store_test_results:
+        path: ~/junit
+    - store_artifacts:
+        path: ./junit
+
+
+    #- run: xvfb-run -a npm run test -- --watch=false --progress=false --browsers=ChromeNoSandbox
     #- run: xvfb-run -a npm run e2e -- --config=protractor-ci.conf.js
